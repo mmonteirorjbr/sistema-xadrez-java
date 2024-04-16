@@ -28,6 +28,16 @@ public class Tabuleiro {
 		this.colunas = colunas;
 	}
 	 
+	// retorna a peça pela linha e coluna
+	public Peca peca(int linha,int coluna) {
 	 
-	 
+	 return pecas[linha][coluna];
+	}
+	
+	// retorna a peça pela posicao que ja vem com a linha e a coluna
+	public Peca peca(Posicao posicao) {
+		 
+		 return pecas[posicao.getlinha()][posicao.getcoluna()];
+		}
+
 }
