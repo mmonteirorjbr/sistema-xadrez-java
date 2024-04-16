@@ -1,15 +1,14 @@
 package aplicacao;
 
-import Tabuleiro.Posicao;
+import tabuleiroJogo.Tabuleiro;
+
 
 public class ProgramaJogoXadrez {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		
-		Posicao pos = new Posicao(3, 5 );
-		System.out.println(pos);
-		
+		Tabuleiro tabuleiro = new Tabuleiro(8,8); 
   
 	}
 
