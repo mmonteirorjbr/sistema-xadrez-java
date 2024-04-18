@@ -40,4 +40,15 @@ public class Tabuleiro {
 		 return pecas[posicao.getlinha()][posicao.getcoluna()];
 		}
 
+	  public void PosicionaPeca(Peca peca, Posicao posicao) {
+	    // atribui na matriz de pecas a posicao que foi recebida
+		  pecas[posicao.getlinha()][posicao.getcoluna()]= peca;
+		  
+		  // determina a posicao pelo que foi recebido. O ponto importante e que ele consegue
+		  // acessar aqui porque posicao foi definido como protected no tabuleiro e como ela e do mesmo pacote
+		  // da pra acessa-la livremente aqui
+		  
+		  peca.posicao = posicao;
+	  }
+	  
 }
