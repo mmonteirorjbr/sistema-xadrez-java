@@ -1,6 +1,6 @@
 package xadrez;
 
-import tabuleiroJogo.Posicao;
+
 import tabuleiroJogo.Tabuleiro;
 import xadrez.pecas.Rei;
 import xadrez.pecas.Torre;
@@ -29,10 +29,15 @@ public class PartidadeXadrez {
 	 // 
  }
  
-     private void setupInicial() {
-    	 tabuleiro.PosicionaPeca(new Torre(tabuleiro, Cor.BRANCA), new Posicao(2,1));
-    	 tabuleiro.PosicionaPeca(new Rei(tabuleiro, Cor.PRETA), new Posicao(0,4));
-    	 tabuleiro.PosicionaPeca(new Rei(tabuleiro, Cor.BRANCA), new Posicao(7,4));
-    	    
+     private void PosicionaNovaPeca(char coluna, int linha, PecadeXadrez peca) {
+    	 tabuleiro.PosicionaPeca(peca, new XadrezPosicao(coluna, linha).paraPosicao());
      }
+     private void setupInicial() {
+    	 PosicionaNovaPeca('b' ,6 , new Torre(tabuleiro, Cor.BRANCA));
+    	 PosicionaNovaPeca('e',8, new Rei(tabuleiro, Cor.BRANCA));
+    	 PosicionaNovaPeca('e', 1 ,new Rei(tabuleiro, Cor.BRANCA));    	    
+     }
+     
+     // parei aqui - comecar o video 8
+     
 }
