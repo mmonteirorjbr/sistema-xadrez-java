@@ -31,8 +31,10 @@ public class PartidadeXadrez {
  
      private void setupInicial() {
     	 tabuleiro.PosicionaPeca(new Torre(tabuleiro, Cor.BRANCA), new Posicao(2,1));
-    	 tabuleiro.PosicionaPeca(new Rei(tabuleiro, Cor.PRETA), new Posicao(0,4));
-    	 tabuleiro.PosicionaPeca(new Rei(tabuleiro, Cor.BRANCA), new Posicao(7,4));
-    	    
+    	 tabuleiro.PosicionaPeca(new Rei(tabuleiro, Cor.PRETA),    new Posicao(0,4));
+    	 tabuleiro.PosicionaPeca(new Rei(tabuleiro, Cor.BRANCA),   new Posicao(7,4));    	    
      }
+     
+     // parei aqui - comecar o video 8
+     
 }
