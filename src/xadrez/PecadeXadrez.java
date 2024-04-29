@@ -3,7 +3,9 @@ package xadrez;
 import tabuleiroJogo.Peca;
 import tabuleiroJogo.Tabuleiro;
 
-public class PecadeXadrez extends Peca {
+// peca de xadrez nao era abstrata mas como ela extende Peca que e abstrata entao
+// ela tambem precisa ser abstrata
+public abstract class PecadeXadrez extends Peca {
 
 	  private Cor cor;
 	  
