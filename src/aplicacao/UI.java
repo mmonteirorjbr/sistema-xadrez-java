@@ -50,7 +50,7 @@ public class UI {
 			return new PosicaoXadrez(coluna, linha);
 		}
 	    catch (RuntimeException e ) {
-	    	throw new InputMismatchException("Erro lendo posicao de xadrez. Valoreas validos sao de a1 até h8.");
+	    	throw new InputMismatchException("Erro lendo posicao de xadrez. Valoreas validos sao de a1 ate h8.");
 	    }
 	    
 	}
@@ -92,5 +92,6 @@ public class UI {
 		System.out.print(" "); // imprime um espaco em branco para as pecas nao ficarem grudadas
 
 	}
-
+    // parei aqui,m proximo video e o 12
+	
 }

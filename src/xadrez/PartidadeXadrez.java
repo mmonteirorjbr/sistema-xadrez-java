@@ -55,10 +55,14 @@ public class PartidadeXadrez {
  }
  
  private void validaPosicaoOrigem(Posicao posicao) { 
-	 if (! tabuleiro.jaTemUmaPeca(posicao))
+	 if (! tabuleiro.jaTemUmaPeca(posicao)) {
 		throw new XadrezExcecao("Nao existe nenhuma peça na posicao de origem");
-	 
+        }
+      if (! tabuleiro.peca(posicao).existeUmMovimentoPossivel()) {
+    	  throw new XadrezExcecao("Nao existe nenhum movimento possivel para a peca escolhida");
+          } 	 
  }
+
  private void PosicionaNovaPeca(char coluna, int linha, PecadeXadrez peca) {
 		tabuleiro.PosicionaPeca(peca, new  PosicaoXadrez(coluna, linha).paraPosicao());
        }
