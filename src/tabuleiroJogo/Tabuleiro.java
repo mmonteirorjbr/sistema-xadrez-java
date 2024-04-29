@@ -44,8 +44,7 @@ public class Tabuleiro {
 		 return pecas[posicao.getlinha()][posicao.getcoluna()];
 		}
 
-	  public void PosicionaPeca(Peca peca, Posicao posicao) {
-		  
+	  public void PosicionaPeca(Peca peca, Posicao posicao) {	  
 		  
 		 // Antes de posicionar a peça, verifica se a posicao ja nao esta ocupada
 		 if  ( jaTemUmaPeca(posicao)) {
@@ -61,6 +60,31 @@ public class Tabuleiro {
 		  peca.posicao = posicao;
 	  }
 
+	  public Peca removePeca(Posicao posicao) {
+		  // Para ler o cabeçalho do metodo:
+		  // Um metodo publico que retorna um valor do tipo peca e o parametro é uma posicao do tipo posicao
+
+		  if (!existePosicao(posicao)){
+               throw new TabuleiroExcecao("Essa posicao nao  existe no tabuleiro");
+		 }
+	         // se nao tiver peca na posicao , retorna nulo
+		  
+		    if (peca(posicao) == null) {
+		    	return null;
+		    }
+		    // variavel aux do tipo peca recebe a peca que estiver na posicao
+		    Peca aux = peca(posicao);
+		    
+		    // juro que nao entendi bem esse bloco e a necessidade de ter a variavel auxiliar. era so 
+		    // retornar nulo. 
+		    aux.posicao = null;
+		    pecas[posicao.getlinha()][posicao.getcoluna()] = null;
+		    return aux;
+		    
+	  }
+	  
+	  
+	  
 	  //ele fez dos dois jeitos porque vai ter um momento em que sera mais facil testar pela linha e 
 	  // coluna do que pela posicao
 	  private boolean existePosicao(int linha, int coluna) {
