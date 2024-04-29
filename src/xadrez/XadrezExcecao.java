@@ -1,7 +1,12 @@
 package xadrez;
 
-public class XadrezExcecao extends RuntimeException {
+import tabuleiroJogo.TabuleiroExcecao;
 
+public class XadrezExcecao extends  TabuleiroExcecao {
+
+//	public class XadrezExcecao extends  RuntimeException {
+	// antes era RunTimeException mas como toda excecao de xadrez tb e uma excecao de tabuleiro 
+    // ai para ficar mais facil de entender ele trocou
 	/**
 	 * 
 	 */
