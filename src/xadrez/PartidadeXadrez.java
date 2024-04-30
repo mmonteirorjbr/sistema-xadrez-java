@@ -30,6 +30,15 @@ public class PartidadeXadrez {
 	 // 
  }
  
+ 
+ public boolean[][] movimentosPossiveis(PosicaoXadrez posicaoOrigem) {
+	 Posicao posicao = posicaoOrigem.paraPosicao();
+	 validaPosicaoOrigem(posicao);
+	 // retorna os movimentos possiveis dessa posicao
+	 return tabuleiro.peca(posicao).movimentosPossiveis();
+			 
+      }
+ 
  public PecadeXadrez executaMovimentodeXadrez( PosicaoXadrez posicaoOrigem, PosicaoXadrez posicaoDestino) {
 	 Posicao origem = posicaoOrigem.paraPosicao();
 	 Posicao destino = posicaoDestino.paraPosicao();

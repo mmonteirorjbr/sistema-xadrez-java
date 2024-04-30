@@ -65,7 +65,7 @@ public class UI {
 			// ordem decrescente
 			System.out.print((8 - i) + " ");
 			for (int j = 0; j < pecas.length; j++) {
-				imprimePeca(pecas[i][j]);
+				imprimePeca(pecas[i][j],false);
 			}
 			System.out.println(); // troca de linha na matriz
 
@@ -74,13 +74,37 @@ public class UI {
 
 	}
 
+   // sao duas versoes de imprime o tabuleiro. Uma que so mostra o tabuleiro e as peças que esta cima
+	// e essa que mostra tudo e pinta as posicoes onde o movimento e possivel
+	
+	public static void imprimeTabuleiro(PecadeXadrez[][] pecas, boolean[][] movimentosPossiveis) {
+
+		for (int i = 0; i < pecas.length; i++) {
+
+			System.out.print((8 - i) + " ");
+			for (int j = 0; j < pecas.length; j++) {
+				imprimePeca(pecas[i][j],movimentosPossiveis[i][j]); // como e so pra imprmir o tabuleiro sem os movimentos possiveis
+			}                                   // ele manda falso direto  
+			System.out.println(); // troca de linha na matriz
+
+		}
+		System.out.println("  a b c d e f g h ");
+
+	}
+
+	
+	
+	
 	// metodo pra imprimir uma peça
 	// ele vai usar o terminal do git bash que tem fundo preto entao nao da pra usar cor preta nas peças
 	// ele vai simbolizar o preto usando o amarelo
 	
-	private static void imprimePeca(PecadeXadrez peca) {
-		if (peca == null) {
-			System.out.print("-");
+	private static void imprimePeca(PecadeXadrez peca, boolean fundo) {
+		if (fundo) {
+			System.out.print(ANSI_BLUE_BACKGROUND);			
+		}
+		if (peca == null) {   // usa O ANSI_RESET para limpar ainformacao da cor
+			System.out.print("-"+ ANSI_RESET );
 		} else {
 			   if (peca.getCor() == Cor.BRANCA) {
 	                System.out.print(ANSI_WHITE + peca + ANSI_RESET);
@@ -92,6 +116,6 @@ public class UI {
 		System.out.print(" "); // imprime um espaco em branco para as pecas nao ficarem grudadas
 
 	}
-    // parei aqui,m proximo video e o 12
+
 	
 }
