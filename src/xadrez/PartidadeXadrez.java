@@ -35,6 +35,7 @@ public class PartidadeXadrez {
 	 Posicao destino = posicaoDestino.paraPosicao();
 	 // antes de fazer tem de validar se na posicao de origem tinha uma peca
 	 validaPosicaoOrigem(origem);
+	 validaPosicaoDestino(origem,destino);
 	 Peca pecaCapturada = movimenta(origem, destino);
 	 return (PecadeXadrez) pecaCapturada; // teve de fazer um downcasting porque a peca capturada era do tipo
 	                                      // peca
@@ -63,6 +64,12 @@ public class PartidadeXadrez {
           } 	 
  }
 
+ 
+ private void validaPosicaoDestino(Posicao origem, Posicao destino) {
+	 if ( ! tabuleiro.peca(origem).movimentoPossivel(destino)) {
+		throw new  XadrezExcecao("A peça escolhida nao pode se mover para a posicao de destino");
+	 }
+ }
  private void PosicionaNovaPeca(char coluna, int linha, PecadeXadrez peca) {
 		tabuleiro.PosicionaPeca(peca, new  PosicaoXadrez(coluna, linha).paraPosicao());
        }
