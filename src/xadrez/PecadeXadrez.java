@@ -1,6 +1,7 @@
 package xadrez;
 
 import tabuleiroJogo.Peca;
+import tabuleiroJogo.Posicao;
 import tabuleiroJogo.Tabuleiro;
 
 // peca de xadrez nao era abstrata mas como ela extende Peca que e abstrata entao
@@ -21,6 +22,15 @@ public abstract class PecadeXadrez extends Peca {
 		return cor;
 	}
 
+	 protected boolean existePecaAdversaria(Posicao posicao) {
 	
-	  
+	  // a variavel p que tem o formato Pecadexadrez recebe a posicao do tabuleiro que
+	 // e convertida para o formato PecadeXadrez.
+	  PecadeXadrez p = (PecadeXadrez) getTabuleiro().peca(posicao);
+	 // agora ve se a peca e uma peca adversaria. Nesse caso a peça sera nula ou
+	 // 
+	 return p !=null && p.getCor() != cor;
+	 }
+	 
+	 
 }
