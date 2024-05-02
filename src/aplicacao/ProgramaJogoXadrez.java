@@ -26,7 +26,7 @@ public class ProgramaJogoXadrez {
 				//limpa a tela antes de comecar
 				UI.clearScreen(); 
 				// Le a origem
-	            UI.imprimeTabuleiro(partidadeXadrez.getPecas());
+	            UI.imprimePartida(partidadeXadrez);
 	            System.out.println();
 	            System.out.print("Origem: " );
 	            PosicaoXadrez origem = UI.LeposicaoXadrez(sc);

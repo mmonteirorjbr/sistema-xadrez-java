@@ -9,14 +9,28 @@ import xadrez.pecas.Torre;
 // essa classe e o coracao do jogo, e enla que teremos as regras do jogo
 public class PartidadeXadrez {
 	
+  private int turno;
+  private Cor jogadorAtual;
   private Tabuleiro tabuleiro;
   
   public PartidadeXadrez() {
 	  tabuleiro = new Tabuleiro(8,8);
+	  turno = 1;
+	  jogadorAtual = Cor.BRANCA;
 	  setupInicial();
 	  
   }
- public  PecadeXadrez[][] getPecas() {
+  
+ public int getTurno() {
+	return turno;
+}
+
+public Cor getJogadorAtual() {
+	return jogadorAtual;
+}
+
+
+public  PecadeXadrez[][] getPecas() {
 	 
 	 PecadeXadrez[][] mat = new PecadeXadrez[tabuleiro.getLinhas()][tabuleiro.getColunas()];
 	 //vai percorrer o tabuleiro e para cada peca no tabuleiro vai fazer um downcast) para PecadeXadrez
@@ -46,6 +60,8 @@ public class PartidadeXadrez {
 	 validaPosicaoOrigem(origem);
 	 validaPosicaoDestino(origem,destino);
 	 Peca pecaCapturada = movimenta(origem, destino);
+	 // troca de jogador
+	 trocaTurno();
 	 return (PecadeXadrez) pecaCapturada; // teve de fazer um downcasting porque a peca capturada era do tipo
 	                                      // peca
 	 
@@ -68,6 +84,14 @@ public class PartidadeXadrez {
 	 if (! tabuleiro.jaTemUmaPeca(posicao)) {
 		throw new XadrezExcecao("Nao existe nenhuma peça na posicao de origem");
         }
+	 // ai ai, vamos la. Estou pegando a cor da peca, mas ela e ma propriedade de peca de xadrez, peca é mais 
+	 // generica entao tem de fazer o downcast para peca de xadrez para poder funcionar
+	 // nO caso verifica a cor da peca e se ela for diferente do jogador atual ´pe uma peca do adversario
+	 // entao nao pode movê-la
+	  if (jogadorAtual != ((PecadeXadrez) tabuleiro.peca(posicao)).getCor()) {
+		  throw new XadrezExcecao(" A peça escolhida nao e sua");
+	  }
+	  
       if (! tabuleiro.peca(posicao).existeUmMovimentoPossivel()) {
     	  throw new XadrezExcecao("Nao existe nenhum movimento possivel para a peca escolhida");
           } 	 
@@ -79,6 +103,16 @@ public class PartidadeXadrez {
 		throw new  XadrezExcecao("A peça escolhida nao pode se mover para a posicao de destino");
 	 }
  }
+ 
+ private void  trocaTurno() {
+	 
+      turno++;
+      // o comando seguinte e um baita de um if. ele chamou de expressao condicional ternaria que funciona assim
+      // Se o jogador atual for igual a Cor branca  entao(?) ele vai ser o de cor preta caso contratrio(:) ele vai ser
+      // o de cor branca 
+      jogadorAtual = (jogadorAtual ==Cor.BRANCA ? Cor.PRETA : Cor.BRANCA);
+ }
+ 
  private void PosicionaNovaPeca(char coluna, int linha, PecadeXadrez peca) {
 		tabuleiro.PosicionaPeca(peca, new  PosicaoXadrez(coluna, linha).paraPosicao());
        }
