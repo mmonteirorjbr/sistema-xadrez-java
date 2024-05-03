@@ -1,7 +1,10 @@
 package aplicacao;
 
+import java.util.Arrays;
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 import xadrez.Cor;
 import xadrez.PartidadeXadrez;
@@ -54,9 +57,11 @@ public class UI {
 	    	throw new InputMismatchException("Erro lendo posicao de xadrez. Valoreas validos sao de a1 ate h8.");
 	    }
 	}    
-	public static void imprimePartida(PartidadeXadrez partidadeXadrez ) {   
+	public static void imprimePartida(PartidadeXadrez partidadeXadrez, List<PecadeXadrez> capturadas ) {   
 	 // IMprimir a partida significa prmeiro imprimir o tabuleiro
 	imprimeTabuleiro(partidadeXadrez.getPecas());	
+	System.out.println();
+	imprimePecasCapturadas(capturadas);
 	System.out.println();
 	System.out.println("Turno : "+ partidadeXadrez.getTurno());
 	System.out.println(" Esperando Jogador: " + partidadeXadrez.getJogadorAtual()   );
@@ -127,5 +132,29 @@ public class UI {
 
 	}
 
+	private static void imprimePecasCapturadas(List<PecadeXadrez> capturadas ) {
+		// faz um filtro na lista pegando aqueles que tem a cor branca
+		List<PecadeXadrez> brancas = capturadas.stream().filter(x -> x.getCor() == Cor.BRANCA ).collect(Collectors.toList());
+		List<PecadeXadrez> pretas = capturadas.stream().filter(x -> x.getCor() == Cor.PRETA ).collect(Collectors.toList()); 
+		System.out.println("Pecas Capturadas:");		
+		System.out.print("Brancas:");
+		// troca a cor para cor branca  para listar as pecas com a cor branca
+		System.out.print(ANSI_WHITE);
+		// Lista o array inteiro de pecas brancas capturadas
+		System.out.println(Arrays.toString(brancas.toArray()));
+		// Reseta a cor da impressao
+		System.out.print(ANSI_RESET);
 	
+		System.out.print("Pretas:");
+		// troca a cor para cor preta  para listar as pecas com a cor preta(que aqui e amarela) 
+		System.out.print(ANSI_YELLOW);
+		// Lista o array inteiro de pecas pretas capturadas
+		System.out.println(Arrays.toString(pretas.toArray()));
+		// Reseta a cor da impressao
+		System.out.print(ANSI_RESET);
+	
+		
+	}
 }
+
+// parei no video 18 aos 03:50Hs
