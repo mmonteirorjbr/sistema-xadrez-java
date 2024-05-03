@@ -1,6 +1,8 @@
 package aplicacao;
 
+import java.util.ArrayList;
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
 
 import xadrez.PartidadeXadrez;
@@ -19,6 +21,11 @@ public class ProgramaJogoXadrez {
 		// Instancía uma partida de xadrez e lista o tabuleiro na tela
 		PartidadeXadrez partidadeXadrez =  new PartidadeXadrez();
 		
+		// declara uma  lista de pecas capturadas aqui para poder ser publica em todo  o programa
+		List<PecadeXadrez> capturadas  = new ArrayList<>();
+		
+		
+		
 		// classe UI - User Interface - dentro dessa classe cria um metodo pra imprimir o tabuleiro e ele recebe
 		// a matriz de peças
 		while (true ) {
@@ -26,7 +33,7 @@ public class ProgramaJogoXadrez {
 				//limpa a tela antes de comecar
 				UI.clearScreen(); 
 				// Le a origem
-	            UI.imprimePartida(partidadeXadrez);
+	            UI.imprimePartida(partidadeXadrez, capturadas);
 	            System.out.println();
 	            System.out.print("Origem: " );
 	            PosicaoXadrez origem = UI.LeposicaoXadrez(sc);
@@ -45,6 +52,12 @@ public class ProgramaJogoXadrez {
 	            PosicaoXadrez destino = UI.LeposicaoXadrez(sc);
 	            
 	            PecadeXadrez pecaCapturada = partidadeXadrez.executaMovimentodeXadrez(origem,  destino);
+	            // Se apos executar o movuimento de xadrez tiver como resultado uma peca capturada
+	            // ela sera incluida na lista d epecas capturadas 
+	            if (pecaCapturada != null ) { 
+	            	capturadas.add(pecaCapturada);
+	            	
+	            }
 			}   
 		   catch (XadrezExcecao e) {
 			   System.out.println(e.getMessage());

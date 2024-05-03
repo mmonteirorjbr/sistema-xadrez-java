@@ -1,5 +1,8 @@
 package xadrez;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import tabuleiroJogo.Peca;
 import tabuleiroJogo.Posicao;
 import tabuleiroJogo.Tabuleiro;
@@ -12,7 +15,11 @@ public class PartidadeXadrez {
   private int turno;
   private Cor jogadorAtual;
   private Tabuleiro tabuleiro;
-  
+  // Tinha feito essa lista como pecaDeXadrez mas achou melhor usar a classe mais
+  // generica peca
+  private List<Peca> pecasNoTabuleiro = new ArrayList<>();	
+  private List<Peca> pecasCapturadas  = new ArrayList<>();	
+			  
   public PartidadeXadrez() {
 	  tabuleiro = new Tabuleiro(8,8);
 	  turno = 1;
@@ -74,7 +81,16 @@ public  PecadeXadrez[][] getPecas() {
 	 Peca pecaCapturada = tabuleiro.removePeca(destino);
 	 //coloca a peca da origem no destino
 	 tabuleiro.PosicionaPeca(p, destino);
+	 
+     // quando mover uma peca tem de verificar se esse movimento causo uma captura de peça
+	 // nesse caso tem de retirar do tabuleiro e colocar na lista de pecas capturadas
+	 if (pecaCapturada != null) {
+		 pecasNoTabuleiro.remove(pecaCapturada);
+		 pecasCapturadas.add(pecaCapturada);
+	 }
+	 
 	 return pecaCapturada;
+	 
 	 
 	 
 	 
@@ -115,6 +131,11 @@ public  PecadeXadrez[][] getPecas() {
  
  private void PosicionaNovaPeca(char coluna, int linha, PecadeXadrez peca) {
 		tabuleiro.PosicionaPeca(peca, new  PosicaoXadrez(coluna, linha).paraPosicao());
+		
+		// sem q instanciar uma nova peca tem de colocar essa peca na lista de pecas no tabuleito
+		pecasNoTabuleiro.add(peca);
+		
+		
        }
  
      private void setupInicial() {
