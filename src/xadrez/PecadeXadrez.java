@@ -22,6 +22,11 @@ public abstract class PecadeXadrez extends Peca {
 		return cor;
 	}
 
+	public PosicaoXadrez getPosicaoXadrez() {
+		// converter posicao para posicaoxadrez
+		return PosicaoXadrez.daPosicao(posicao);
+	}
+
 	 protected boolean existePecaAdversaria(Posicao posicao) {
 	
 	  // a variavel p que tem o formato Pecadexadrez recebe a posicao do tabuleiro que

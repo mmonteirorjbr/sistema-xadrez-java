@@ -36,7 +36,7 @@ public class ProgramaJogoXadrez {
 	            UI.imprimePartida(partidadeXadrez, capturadas);
 	            System.out.println();
 	            System.out.print("Origem: " );
-	            PosicaoXadrez origem = UI.LeposicaoXadrez(sc);
+	            PosicaoXadrez origem = UI.LeposicaoXadrez(sc); 
 	            
 	            // a ideia e ver quais sao os movimentos possiveis e imprimir a matriz com essas posicoes pintadas
 	            // para o usuario escolher o proximo movimento

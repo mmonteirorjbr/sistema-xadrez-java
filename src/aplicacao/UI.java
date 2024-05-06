@@ -58,15 +58,18 @@ public class UI {
 	    }
 	}    
 	public static void imprimePartida(PartidadeXadrez partidadeXadrez, List<PecadeXadrez> capturadas ) {   
-	 // IMprimir a partida significa prmeiro imprimir o tabuleiro
-	imprimeTabuleiro(partidadeXadrez.getPecas());	
-	System.out.println();
-	imprimePecasCapturadas(capturadas);
-	System.out.println();
-	System.out.println("Turno : "+ partidadeXadrez.getTurno());
-	System.out.println(" Esperando Jogador: " + partidadeXadrez.getJogadorAtual()   );
-	
-		
+		 // IMprimir a partida significa prmeiro imprimir o tabuleiro
+		imprimeTabuleiro(partidadeXadrez.getPecas());	
+		System.out.println();
+		imprimePecasCapturadas(capturadas);
+		System.out.println();
+		System.out.println("Turno : "+ partidadeXadrez.getTurno());
+		System.out.println(" Esperando Jogador: " + partidadeXadrez.getJogadorAtual()   );
+		if (partidadeXadrez.getXeque()) {
+			System.out.println("XEQUE!!!");
+					
+		}
+			
 	}
 	
 	public static void imprimeTabuleiro(PecadeXadrez[][] pecas) {
