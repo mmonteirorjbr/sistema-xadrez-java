@@ -17,6 +17,7 @@ public class PartidadeXadrez {
   private Cor jogadorAtual;
   private Tabuleiro tabuleiro;
   private boolean xeque;
+  private boolean xequeMate;
   
   
   // Tinha feito essa lista como pecaDeXadrez mas achou melhor usar a classe mais
@@ -45,6 +46,10 @@ public Cor getJogadorAtual() {
 
 public boolean getXeque() {
 	return xeque;
+}
+
+public boolean getXequeMate() {
+	return xequeMate;
 }
 
 public  PecadeXadrez[][] getPecas() {
@@ -86,9 +91,14 @@ public  PecadeXadrez[][] getPecas() {
 	 // agora testa se o oponente esta em xeque
 	 xeque = (testeXeque(oponente(jogadorAtual))) ? true : false; 
 	 
-	 
-	 // troca de jogador
-	 trocaTurno();
+	 // se a jogada que eu fiz deixou o oponente em cheque mate o jogo vai ter de acabar
+	 if (testeXequeMate(oponente(jogadorAtual))) {
+		 xequeMate = true;	 
+	 }
+	 else  {
+     	 //  troca de jogador
+	     trocaTurno();
+	 }
 	 return (PecadeXadrez) pecaCapturada; // teve de fazer um downcasting porque a peca capturada era do tipo
 	                                      // peca
 	 
@@ -206,16 +216,58 @@ public  PecadeXadrez[][] getPecas() {
      
      
  }
+ 
+ private boolean testeXequeMate( Cor cor) {
+	 // pra ser xeque mate ja tem de ser xeque
+	 
+	 if (!testeXeque(cor)) {
+		 return false;
+	 }
+	 List<Peca> list = pecasNoTabuleiro.stream().filter(x -> ((PecadeXadrez)x).getCor() == cor).collect(Collectors.toList());
+	 for (Peca p : list) {
+		 // para cada peca pega os movimentos possiveis dela
+		 // e vai percorrendo as posicoes do tabuleiro
+		 
+		 boolean[][] mat =  p.movimentosPossiveis();
+		 for (int i=0; i < tabuleiro.getLinhas();i++ ) 
+		      for (int j=0; j< tabuleiro.getColunas(); j++) {
+		    	  // ver seo movimento possivel tira a peça do xeque
+		    	  if  (mat[i][j]) {
+		    		  //nao da pra simplesmente puxar a posicao pq ela e de outro metodo entao tem de pegar pelo get e fazer o downcast		    		  
+		    		  //Posicao origem = p.posicao;
+		    		  Posicao origem = ((PecadeXadrez)p).getPosicaoXadrez().paraPosicao();
+		    		  Posicao destino = new Posicao(i,j);
+		    		  // agora movimenta a peca da origem para o destino
+		    		  Peca pecaCapturada = movimenta(origem, destino);
+		    		  boolean testeXeque = testeXeque(cor);
+		    		  // ele apenas testa, no final tem de desfazer o movimento e voltar tudo como estava		    		  
+		    		  desfazerMovimento(origem, destino, pecaCapturada);
+		    		  // se o movimento nao esta em cheque significa que o movimento tirou o rei do cheque
+		    		  // entao retorna false porque nao esta em cheque mate
+		    		  if (!testeXeque) {
+		    			  return false;
+		    			  
+		    		  }
+		    	  }
+		      }
+	 
+	 }
+	 return true;
+ }
+ 
  private void PosicionaNovaPeca(char coluna, int linha, PecadeXadrez peca) {
 		tabuleiro.PosicionaPeca(peca, new  PosicaoXadrez(coluna, linha).paraPosicao());
 		
 		// sem q instanciar uma nova peca tem de colocar essa peca na lista de pecas no tabuleito
 		pecasNoTabuleiro.add(peca);
-		
+		   	
 		
        }
  
      private void setupInicial() {
+    	    // Tabuleiro inicial
+    	 
+    	   /* 
     	    PosicionaNovaPeca('c', 1, new Torre(tabuleiro, Cor.BRANCA));
     	    PosicionaNovaPeca('c', 2, new Torre(tabuleiro, Cor.BRANCA));
             PosicionaNovaPeca('d', 2, new Torre(tabuleiro, Cor.BRANCA));
@@ -229,6 +281,13 @@ public  PecadeXadrez[][] getPecas() {
             PosicionaNovaPeca('e', 7, new Torre(tabuleiro, Cor.PRETA));
             PosicionaNovaPeca('e', 8, new Torre(tabuleiro, Cor.PRETA));
             PosicionaNovaPeca('d', 8, new Rei(tabuleiro, Cor.PRETA));
+    	 */
+         PosicionaNovaPeca('h', 7, new Torre(tabuleiro, Cor.BRANCA));
+ 	     PosicionaNovaPeca('d', 1, new Torre(tabuleiro, Cor.BRANCA));
+         PosicionaNovaPeca('e', 1, new Rei(tabuleiro, Cor.BRANCA));
+         
+         PosicionaNovaPeca('b', 8, new Torre(tabuleiro, Cor.PRETA));
+         PosicionaNovaPeca('a', 8, new Rei(tabuleiro,   Cor.PRETA));
     	 
     	 
      }
