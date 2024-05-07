@@ -28,7 +28,8 @@ public class ProgramaJogoXadrez {
 		
 		// classe UI - User Interface - dentro dessa classe cria um metodo pra imprimir o tabuleiro e ele recebe
 		// a matriz de peças
-		while (true ) {
+		// roda o programa enquanto nao estiver em xeque mate
+		while (!partidadeXadrez.getXequeMate() ) {
 			try {
 				//limpa a tela antes de comecar
 				UI.clearScreen(); 
@@ -69,6 +70,10 @@ public class ProgramaJogoXadrez {
 		   }
 
 		}
+		// se entrar aqui e pq teve o xeque mate
+		// limpa a tela e mostra o tabuleiro de novo com a partifa finalizada
+		UI.clearScreen();
+		UI.imprimePartida(partidadeXadrez, capturadas);
 	}
-
+ 
 }
