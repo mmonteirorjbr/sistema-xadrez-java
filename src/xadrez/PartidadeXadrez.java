@@ -107,7 +107,9 @@ public  PecadeXadrez[][] getPecas() {
  
  private Peca movimenta(Posicao origem, Posicao destino) {
 	 // retira a peca da posicao de origem
-	 Peca p = tabuleiro.removePeca(origem);
+	 PecadeXadrez p = (PecadeXadrez)tabuleiro.removePeca(origem);
+	 
+	 p.incrementaContaMovimentos();
 	 // remove a peca que etaria na posicao de destino, ou a peca a ser " comida"	 
 	 Peca pecaCapturada = tabuleiro.removePeca(destino);
 	 //coloca a peca da origem no destino
@@ -125,7 +127,9 @@ public  PecadeXadrez[][] getPecas() {
  
  private void desfazerMovimento( Posicao origem, Posicao destino, Peca pecaCapturada) {
 	 // vai desfazer todas as opreacoes do metodo movimenta
-	 Peca p = tabuleiro.removePeca(destino);
+	 PecadeXadrez p =(PecadeXadrez)tabuleiro.removePeca(destino);
+	 p.decrementaContaMovimentos();
+	 
 	 tabuleiro.PosicionaPeca(p, origem);
 	 
 	 if (pecaCapturada != null) {
