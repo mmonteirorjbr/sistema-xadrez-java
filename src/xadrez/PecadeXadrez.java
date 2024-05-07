@@ -9,6 +9,7 @@ import tabuleiroJogo.Tabuleiro;
 public abstract class PecadeXadrez extends Peca {
 
 	  private Cor cor;
+	  private int contaMovimentos; // Ele ja inicializa com 0
 	  
     // Ele e derivado do tabuleiro e la tem um construtor entao precisou gerar um
 	public PecadeXadrez(Tabuleiro tabuleiro, Cor cor) {
@@ -22,6 +23,17 @@ public abstract class PecadeXadrez extends Peca {
 		return cor;
 	}
 
+	public int getContaMovimentos() {
+		return contaMovimentos;
+	}
+	public void incrementaContaMovimentos() {
+		contaMovimentos++;
+	}
+	
+	public void decrementaContaMovimentos() {
+		contaMovimentos--;
+	}
+	
 	public PosicaoXadrez getPosicaoXadrez() {
 		// converter posicao para posicaoxadrez
 		return PosicaoXadrez.daPosicao(posicao);
