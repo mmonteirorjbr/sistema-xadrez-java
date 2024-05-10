@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import tabuleiroJogo.Peca;
 import tabuleiroJogo.Posicao;
 import tabuleiroJogo.Tabuleiro;
+import xadrez.pecas.Peao;
 import xadrez.pecas.Rei;
 import xadrez.pecas.Torre;
 
@@ -262,7 +263,7 @@ public  PecadeXadrez[][] getPecas() {
  private void PosicionaNovaPeca(char coluna, int linha, PecadeXadrez peca) {
 		tabuleiro.PosicionaPeca(peca, new  PosicaoXadrez(coluna, linha).paraPosicao());
 		
-		// sem q instanciar uma nova peca tem de colocar essa peca na lista de pecas no tabuleito
+		// sem q instanciar uma nova peca tem de colocar essa peca na lista de pecas no tabuleiro
 		pecasNoTabuleiro.add(peca);
 		   	
 		
@@ -286,15 +287,33 @@ public  PecadeXadrez[][] getPecas() {
             PosicionaNovaPeca('e', 8, new Torre(tabuleiro, Cor.PRETA));
             PosicionaNovaPeca('d', 8, new Rei(tabuleiro, Cor.PRETA));
     	 */
-         PosicionaNovaPeca('h', 7, new Torre(tabuleiro, Cor.BRANCA));
- 	     PosicionaNovaPeca('d', 1, new Torre(tabuleiro, Cor.BRANCA));
-         PosicionaNovaPeca('e', 1, new Rei(tabuleiro, Cor.BRANCA));
-         
-         PosicionaNovaPeca('b', 8, new Torre(tabuleiro, Cor.PRETA));
-         PosicionaNovaPeca('a', 8, new Rei(tabuleiro,   Cor.PRETA));
     	 
+         PosicionaNovaPeca('a', 1, new Torre(tabuleiro, Cor.BRANCA));
+ 	     PosicionaNovaPeca('e', 1, new Rei(  tabuleiro, Cor.BRANCA));
+         PosicionaNovaPeca('h', 1, new Torre(tabuleiro, Cor.BRANCA));
+         PosicionaNovaPeca('a', 2, new Peao (tabuleiro, Cor.BRANCA));
+         PosicionaNovaPeca('b', 2, new Peao( tabuleiro, Cor.BRANCA));
+         PosicionaNovaPeca('c', 2, new Peao( tabuleiro, Cor.BRANCA));
+ 	     PosicionaNovaPeca('d', 2, new Peao( tabuleiro, Cor.BRANCA));
+         PosicionaNovaPeca('e', 2, new Peao( tabuleiro, Cor.BRANCA));
+         PosicionaNovaPeca('f', 2, new Peao( tabuleiro, Cor.BRANCA));
+         PosicionaNovaPeca('g', 2, new Peao( tabuleiro, Cor.BRANCA));
+         PosicionaNovaPeca('h', 2, new Peao( tabuleiro, Cor.BRANCA));
+
+         PosicionaNovaPeca('a', 8, new Torre(tabuleiro, Cor.PRETA));
+ 	     PosicionaNovaPeca('e', 8, new Rei(  tabuleiro, Cor.PRETA));
+         PosicionaNovaPeca('h', 8, new Torre(tabuleiro, Cor.PRETA));
+         PosicionaNovaPeca('a', 7, new Peao( tabuleiro, Cor.PRETA));
+         PosicionaNovaPeca('b', 7, new Peao( tabuleiro, Cor.PRETA));
+         PosicionaNovaPeca('c', 7, new Peao( tabuleiro, Cor.PRETA));
+ 	     PosicionaNovaPeca('d', 7, new Peao( tabuleiro, Cor.PRETA));
+         PosicionaNovaPeca('e', 7, new Peao( tabuleiro, Cor.PRETA));
+         PosicionaNovaPeca('f', 7, new Peao( tabuleiro, Cor.PRETA));
+         PosicionaNovaPeca('g', 7, new Peao( tabuleiro, Cor.PRETA));
+         PosicionaNovaPeca('h', 7, new Peao( tabuleiro, Cor.PRETA));
+
     	 
      }
      
-     
+
 }
