@@ -72,7 +72,7 @@ public boolean[][] movimentosPossiveis(){
 		p.setValores(posicao.getlinha()+2,  posicao.getcoluna());
 		// para andar duas casas a 1a casa tambem tem de estar livre entao vai fazer o teste dela aqui tb
 		
-	    Posicao p2 =  new Posicao(posicao.getlinha()-1,  posicao.getcoluna());
+	    Posicao p2 =  new Posicao(posicao.getlinha()+1,  posicao.getcoluna());
 	    
 	    //valida as duas posicoes se for andar duas casas 
 		if (getTabuleiro().existePosicao(p) && !getTabuleiro().jaTemUmaPeca(p) && getTabuleiro().existePosicao(p2) && !getTabuleiro().jaTemUmaPeca(p2) &&  getContaMovimentos()== 0) {
