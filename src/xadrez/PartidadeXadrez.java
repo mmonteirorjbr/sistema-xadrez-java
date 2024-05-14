@@ -125,9 +125,42 @@ public  PecadeXadrez[][] getPecas() {
 		 pecasNoTabuleiro.remove(pecaCapturada);
 		 pecasCapturadas.add(pecaCapturada);
 	 }
+	 // #movimento especial Roque da torre pelo lado do rei 
+	 // #specialmove castling kingside rook - esse movimento e o Roque pequeno
 	 
-	 return pecaCapturada;	 
- }
+	 // pra saber se o movimento foi um roque pequeno
+	 // ve se e uma isntancia do reio e ve se a posicao de destino  é a posicao de origem +2
+	 if (p instanceof Rei && destino.getcoluna() == origem.getcoluna() + 2) {
+		 // define uma posicao de origem e destino da torre 
+		 Posicao origemT  = new Posicao(origem.getlinha(),origem.getcoluna()+3);
+		 Posicao destinoT = new Posicao(origem.getlinha(),origem.getcoluna()+1);
+		  // tira a torre da posicao de origem dela 
+		 PecadeXadrez torre = (PecadeXadrez)tabuleiro.removePeca(origemT);
+		 // e agora coloca ela na posicao de destino
+		 tabuleiro.PosicionaPeca(torre, destinoT);
+		 // como a torre foi movida aumenta a quantidade de movimentos dela
+		 torre.incrementaContaMovimentos();
+		 
+	 }
+	 //pra saber se o movimento foi um roque pequeno
+	 // ve se e uma isntancia do reio e ve se a posicao de destino  é a posicao de origem -2
+	 if (p instanceof Rei && destino.getcoluna() == origem.getcoluna() - 2) {
+		 // define uma posicao de origem e destino da torre 
+		 Posicao origemT  = new Posicao(origem.getlinha(),origem.getcoluna()-4);
+		 Posicao destinoT = new Posicao(origem.getlinha(),origem.getcoluna() -1);
+		  // tira a torre da posicao de origem dela 
+		 PecadeXadrez torre = (PecadeXadrez)tabuleiro.removePeca(origemT);
+		 // e agora coloca ela na posicao de destino
+		 tabuleiro.PosicionaPeca(torre, destinoT);
+		 // como a torre foi movida aumenta a quantidade de movimentos dela
+		 torre.incrementaContaMovimentos();
+		 
+	 }
+	 
+	 
+	 return pecaCapturada;
+     }
+ 
  
  private void desfazerMovimento( Posicao origem, Posicao destino, Peca pecaCapturada) {
 	 // vai desfazer todas as opreacoes do metodo movimenta
@@ -141,6 +174,41 @@ public  PecadeXadrez[][] getPecas() {
 	    pecasCapturadas.remove(pecaCapturada );
 	 pecasNoTabuleiro.add(pecaCapturada);
 	 }
+	 
+	 // parei aqui - video 28 aos 6:00 mins
+	 
+	 //desfaz o processo de movimento do Roque
+	 // pra saber se o movimento foi um roque pequeno
+	 // ve se e uma isntancia do reio e ve se a posicao de destino  é a posicao de origem +2
+	 if (p instanceof Rei && destino.getcoluna() == origem.getcoluna() + 2) {
+		 // define uma posicao de origem e destino da torre 
+		 Posicao origemT  = new Posicao(origem.getlinha(),origem.getcoluna()+3);
+		 Posicao destinoT = new Posicao(origem.getlinha(),origem.getcoluna()+1);
+		  // como ja tinha movido a torre vai tira-la da posicao de destino dela  
+		 PecadeXadrez torre = (PecadeXadrez)tabuleiro.removePeca(destinoT);
+		 // e agora coloca ela na posicao de destino
+		 tabuleiro.PosicionaPeca(torre, destinoT);
+		 // como a torre foi movida aumenta a quantidade de movimentos dela
+		 torre.decrementaContaMovimentos();
+		 
+	 }
+	 //pra saber se o movimento foi um roque grande
+	 // ve se e uma isntancia do rei e ve se a posicao de destino  é a posicao de origem -2
+	 if (p instanceof Rei && destino.getcoluna() == origem.getcoluna() - 2) {
+		 // define uma posicao de origem e destino da torre 
+		 Posicao origemT  = new Posicao(origem.getlinha(),origem.getcoluna()-4);
+		 Posicao destinoT = new Posicao(origem.getlinha(),origem.getcoluna() -1);
+		  // tira a torre da posicao de destino dela 
+		 PecadeXadrez torre = (PecadeXadrez)tabuleiro.removePeca(destinoT);
+		 // e agora coloca ela na posicao de origem 
+		 tabuleiro.PosicionaPeca(torre, origemT);
+		 // como a torre foi movida aumenta a quantidade de movimentos dela
+		 torre.incrementaContaMovimentos();
+		 
+	 }
+	 
+	 
+	 
  }
  
  private void validaPosicaoOrigem(Posicao posicao) { 
@@ -295,7 +363,11 @@ public  PecadeXadrez[][] getPecas() {
          PosicionaNovaPeca('b', 1, new Cavalo(tabuleiro, Cor.BRANCA));
          PosicionaNovaPeca('c', 1, new Bispo(tabuleiro,  Cor.BRANCA));
          PosicionaNovaPeca('d', 1, new Rainha(tabuleiro, Cor.BRANCA));
- 	     PosicionaNovaPeca('e', 1, new Rei(  tabuleiro,  Cor.BRANCA));
+         
+         // o rei pede para passar a partida como parametro. entao ele passa apenas o "this"
+         // que ja se entende que seja partidadeXadrez
+ 	     PosicionaNovaPeca('e', 1, new Rei(  tabuleiro,  Cor.BRANCA, this));
+ 	     
  	     PosicionaNovaPeca('f', 1, new Bispo(tabuleiro,  Cor.BRANCA));
  	     PosicionaNovaPeca('g', 1, new Cavalo(tabuleiro, Cor.BRANCA));
          PosicionaNovaPeca('h', 1, new Torre(tabuleiro,  Cor.BRANCA));
@@ -312,7 +384,7 @@ public  PecadeXadrez[][] getPecas() {
          PosicionaNovaPeca('b', 8, new Cavalo(tabuleiro, Cor.PRETA));
          PosicionaNovaPeca('c', 8, new Bispo(tabuleiro,  Cor.PRETA));
          PosicionaNovaPeca('d', 8, new Rainha(tabuleiro, Cor.PRETA));
- 	     PosicionaNovaPeca('e', 8, new Rei(  tabuleiro,  Cor.PRETA));
+ 	     PosicionaNovaPeca('e', 8, new Rei(  tabuleiro,  Cor.PRETA, this));
  	     PosicionaNovaPeca('f', 8, new Bispo(tabuleiro,  Cor.PRETA));
  	     PosicionaNovaPeca('g', 8, new Cavalo(tabuleiro, Cor.PRETA));
          PosicionaNovaPeca('h', 8, new Torre(tabuleiro,  Cor.PRETA));
