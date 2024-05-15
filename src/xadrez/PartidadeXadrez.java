@@ -22,6 +22,7 @@ public class PartidadeXadrez {
   private Tabuleiro tabuleiro;
   private boolean xeque;
   private boolean xequeMate;
+  private PecadeXadrez enPassantVulneravel;
   
   
   // Tinha feito essa lista como pecaDeXadrez mas achou melhor usar a classe mais
@@ -56,6 +57,12 @@ public boolean getXequeMate() {
 	return xequeMate;
 }
 
+public PecadeXadrez getEnPassantVulneravel() {
+	return enPassantVulneravel;
+	// essa propriedade ja comeca como falso entao nao precisa inicializa-la
+	
+	
+}
 public  PecadeXadrez[][] getPecas() {
 	 
 	 PecadeXadrez[][] mat = new PecadeXadrez[tabuleiro.getLinhas()][tabuleiro.getColunas()];
@@ -92,6 +99,9 @@ public  PecadeXadrez[][] getPecas() {
 		 desfazerMovimento(origem, destino, pecaCapturada);
 		 throw new XadrezExcecao("Voce nao pode se colocar em xeque");
 	 }
+	 
+	 PecadeXadrez PecaMovida = (PecadeXadrez)tabuleiro.peca(destino);
+	 
 	 // agora testa se o oponente esta em xeque
 	 xeque = (testeXeque(oponente(jogadorAtual))) ? true : false; 
 	 
@@ -103,6 +113,20 @@ public  PecadeXadrez[][] getPecas() {
      	 //  troca de jogador
 	     trocaTurno();
 	 }
+	 
+	 // faz a verirficacao para a joga en PAssant. Se apeca for um peao que moveu dias casas
+	 // ele sera marcado como  vulneravel
+	 
+	 // #movimento especial en passant
+	 // se a peca movida foi um peao e a diferenca de linhas foi de 2, pra mais ou para menos 
+	 if (PecaMovida instanceof Peao && (destino.getlinha() == origem.getlinha() - 2 || destino.getlinha() == origem.getlinha() + 2  )) {
+		    enPassantVulneravel = PecaMovida;
+	 }
+	 else {
+		    enPassantVulneravel = null;  // nao tem ninguem vulneravel
+	 }
+		 
+	 
 	 return (PecadeXadrez) pecaCapturada; // teve de fazer um downcasting porque a peca capturada era do tipo
 	                                      // peca
 	 
@@ -114,7 +138,7 @@ public  PecadeXadrez[][] getPecas() {
 	 PecadeXadrez p = (PecadeXadrez)tabuleiro.removePeca(origem);
 	 
 	 p.incrementaContaMovimentos();
-	 // remove a peca que etaria na posicao de destino, ou a peca a ser " comida"	 
+	 // remove a peca que estaria na posicao de destino, ou a peca a ser " comida"	 
 	 Peca pecaCapturada = tabuleiro.removePeca(destino);
 	 //coloca a peca da origem no destino
 	 tabuleiro.PosicionaPeca(p, destino);
@@ -157,6 +181,44 @@ public  PecadeXadrez[][] getPecas() {
 		 
 	 }
 	 
+	 /*o en passant foe a regra geral do xadrez,  normalmente quando uma peça para em cima de uma
+	 peça adversaria ocorre captura, no caso do en passant a peça vai parar numa casa vazia e
+	 ai vamos ter de fazer a captura manuamente
+	 vou tentar desenhar
+	 
+	       x
+	       P B
+	       
+	 ao inves do Branco ficar no lugar do preto ele vai pra posicao X
+	 */
+	 
+	 // * movmento especial en passant
+	 // esse movimento e para o pean entao testa se e peao
+	 
+	 // se o peao andou na diagonal e tem uma peca capturada significa se ele fez uma captura normal
+	 // se ele andou na diagonal e nao tem peca capturada significa que foi um en passant porque
+	 // o peao normalmente nao pode andar na diagonal 
+	 
+	 
+	if (p instanceof Peao) {
+	
+		if (origem.getcoluna() != destino.getcoluna() && pecaCapturada == null) {
+		   // olhando a posicao. se for peca branca ele sobe entao a peca a ser capturada esta em baixo
+		  //	 da posicao vazia. se for a preta ele desce entao a peca a ser capturada esta acima da posicao
+		  // vazia
+		Posicao  posicaodoPeao;
+		if (p.getCor() == Cor.BRANCA) {
+			posicaodoPeao = new Posicao(destino.getlinha()+1, destino.getcoluna() );					
+		}
+		else {
+			posicaodoPeao = new Posicao(destino.getlinha()-1, destino.getcoluna() )	;				
+		}
+		pecaCapturada = tabuleiro.removePeca(posicaodoPeao);
+		pecasCapturadas.add(pecaCapturada);
+		pecasNoTabuleiro.remove(pecaCapturada);
+	    }
+	}		 
+	 
 	 
 	 return pecaCapturada;
      }
@@ -175,7 +237,7 @@ public  PecadeXadrez[][] getPecas() {
 	 pecasNoTabuleiro.add(pecaCapturada);
 	 }
 	 
-	 // parei aqui - video 28 aos 6:00 mins
+	
 	 
 	 //desfaz o processo de movimento do Roque
 	 // pra saber se o movimento foi um roque pequeno
@@ -207,15 +269,41 @@ public  PecadeXadrez[][] getPecas() {
 		 
 	 }
 	 
+	 // * movmento especial en passant
+	 // esse movimento e para o pean entao testa se e peao
 	 
+	 // se o peao andou na diagonal e tem uma peca capturada significa se ele fez uma captura normal
+	 // se ele andou na diagonal e a peca capturada e a que estava vulneravel significa que foi um en passant porque
+	 // o peao normalmente nao pode andar na diagonal 
 	 
+	// ao desfazer os movimentos do enpassant, a peca capturadaacaba voltando para
+	// a posicao de cima e nao apra a posicao ao lado da peca branca, entao ele vai pra la
+	 // e manualmente a gente traz ela pra posicao ao lado 
+	if (p instanceof Peao) {
+	    PecadeXadrez peao = (PecadeXadrez)tabuleiro.removePeca(destino); // tira a peca da posicao de destino
+		if (origem.getcoluna() != destino.getcoluna() && pecaCapturada == enPassantVulneravel) {
+		   // olhando a posicao. se for peca branca ele sobe entao a peca a ser capturada esta em baixo
+		  //	 da posicao vazia. se for a preta ele desce entao a peca a ser capturada esta acima da posicao
+		  // vazia. Aqui como as linhas onde o movimento en  passant pode acontecer sao fixas ele
+			//decidiu colocar logo o numero da linha ao invez de subir ou descer uma linha na operacao
+		Posicao  posicaodoPeao;
+		if (p.getCor() == Cor.BRANCA) {
+			posicaodoPeao = new Posicao(3, destino.getcoluna() );					
+		}
+		else {
+			posicaodoPeao = new Posicao(4, destino.getcoluna() )	;				
+		}
+		tabuleiro.PosicionaPeca(peao, posicaodoPeao);
+		
+		}
+	}		 
  }
  
  private void validaPosicaoOrigem(Posicao posicao) { 
 	 if (! tabuleiro.jaTemUmaPeca(posicao)) {
 		throw new XadrezExcecao("Nao existe nenhuma peça na posicao de origem");
         }
-	 // ai ai, vamos la. Estou pegando a cor da peca, mas ela e ma propriedade de peca de xadrez, peca é mais 
+	 // ai ai, vamos la. Estou pegando a cor da peca, mas ela e uma propriedade de peca de xadrez, peca é mais 
 	 // generica entao tem de fazer o downcast para peca de xadrez para poder funcionar
 	 // nO caso verifica a cor da peca e se ela for diferente do jogador atual ´pe uma peca do adversario
 	 // entao nao pode movê-la
@@ -365,20 +453,20 @@ public  PecadeXadrez[][] getPecas() {
          PosicionaNovaPeca('d', 1, new Rainha(tabuleiro, Cor.BRANCA));
          
          // o rei pede para passar a partida como parametro. entao ele passa apenas o "this"
-         // que ja se entende que seja partidadeXadrez
+         // que ja se entende que seja a propria partidadeXadrez em que a gente esta 
  	     PosicionaNovaPeca('e', 1, new Rei(  tabuleiro,  Cor.BRANCA, this));
  	     
  	     PosicionaNovaPeca('f', 1, new Bispo(tabuleiro,  Cor.BRANCA));
  	     PosicionaNovaPeca('g', 1, new Cavalo(tabuleiro, Cor.BRANCA));
          PosicionaNovaPeca('h', 1, new Torre(tabuleiro,  Cor.BRANCA));
-         PosicionaNovaPeca('a', 2, new Peao (tabuleiro,  Cor.BRANCA));
-         PosicionaNovaPeca('b', 2, new Peao( tabuleiro,  Cor.BRANCA));
-         PosicionaNovaPeca('c', 2, new Peao( tabuleiro,  Cor.BRANCA));
- 	     PosicionaNovaPeca('d', 2, new Peao( tabuleiro,  Cor.BRANCA));
-         PosicionaNovaPeca('e', 2, new Peao( tabuleiro,  Cor.BRANCA));
-         PosicionaNovaPeca('f', 2, new Peao( tabuleiro,  Cor.BRANCA));
-         PosicionaNovaPeca('g', 2, new Peao( tabuleiro,  Cor.BRANCA));
-         PosicionaNovaPeca('h', 2, new Peao( tabuleiro,  Cor.BRANCA)); 
+         PosicionaNovaPeca('a', 2, new Peao (tabuleiro,  Cor.BRANCA,this));
+         PosicionaNovaPeca('b', 2, new Peao( tabuleiro,  Cor.BRANCA,this));
+         PosicionaNovaPeca('c', 2, new Peao( tabuleiro,  Cor.BRANCA,this));
+ 	     PosicionaNovaPeca('d', 2, new Peao( tabuleiro,  Cor.BRANCA,this));
+         PosicionaNovaPeca('e', 2, new Peao( tabuleiro,  Cor.BRANCA,this));
+         PosicionaNovaPeca('f', 2, new Peao( tabuleiro,  Cor.BRANCA,this));
+         PosicionaNovaPeca('g', 2, new Peao( tabuleiro,  Cor.BRANCA,this));
+         PosicionaNovaPeca('h', 2, new Peao( tabuleiro,  Cor.BRANCA,this)); 
 
          PosicionaNovaPeca('a', 8, new Torre(tabuleiro,  Cor.PRETA));
          PosicionaNovaPeca('b', 8, new Cavalo(tabuleiro, Cor.PRETA));
@@ -388,14 +476,14 @@ public  PecadeXadrez[][] getPecas() {
  	     PosicionaNovaPeca('f', 8, new Bispo(tabuleiro,  Cor.PRETA));
  	     PosicionaNovaPeca('g', 8, new Cavalo(tabuleiro, Cor.PRETA));
          PosicionaNovaPeca('h', 8, new Torre(tabuleiro,  Cor.PRETA));
-         PosicionaNovaPeca('a', 7, new Peao( tabuleiro,  Cor.PRETA));
-         PosicionaNovaPeca('b', 7, new Peao( tabuleiro,  Cor.PRETA));
-         PosicionaNovaPeca('c', 7, new Peao( tabuleiro,  Cor.PRETA));
- 	     PosicionaNovaPeca('d', 7, new Peao( tabuleiro,  Cor.PRETA));
-         PosicionaNovaPeca('e', 7, new Peao( tabuleiro,  Cor.PRETA));
-         PosicionaNovaPeca('f', 7, new Peao( tabuleiro,  Cor.PRETA));
-         PosicionaNovaPeca('g', 7, new Peao( tabuleiro,  Cor.PRETA));
-         PosicionaNovaPeca('h', 7, new Peao( tabuleiro,  Cor.PRETA));
+         PosicionaNovaPeca('a', 7, new Peao( tabuleiro,  Cor.PRETA,this));
+         PosicionaNovaPeca('b', 7, new Peao( tabuleiro,  Cor.PRETA,this));
+         PosicionaNovaPeca('c', 7, new Peao( tabuleiro,  Cor.PRETA,this));
+ 	     PosicionaNovaPeca('d', 7, new Peao( tabuleiro,  Cor.PRETA,this));
+         PosicionaNovaPeca('e', 7, new Peao( tabuleiro,  Cor.PRETA,this));
+         PosicionaNovaPeca('f', 7, new Peao( tabuleiro,  Cor.PRETA,this));
+         PosicionaNovaPeca('g', 7, new Peao( tabuleiro,  Cor.PRETA,this));
+         PosicionaNovaPeca('h', 7, new Peao( tabuleiro,  Cor.PRETA,this));
 
     	 
      }
