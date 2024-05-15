@@ -3,14 +3,17 @@ package xadrez.pecas;
 import tabuleiroJogo.Posicao;
 import tabuleiroJogo.Tabuleiro;
 import xadrez.Cor;
-import xadrez.PecadeXadrez;
+import xadrez.PartidadeXadrez;
 import xadrez.PecadeXadrez;
 
 public class Peao extends PecadeXadrez {
-
+  // isso eu nao entendi muito bem, mas ele precisa que seja passada a partidaXadrez para
+	// que haja uma asosciacao entre os objetos 
+	private  PartidadeXadrez partidadeXadrez;
 	
-	public Peao(Tabuleiro tabuleiro, Cor cor) {
+	public Peao(Tabuleiro tabuleiro, Cor cor, PartidadeXadrez partidadeXadrez ) {
 	  super(tabuleiro,cor);
+	  this.partidadeXadrez = partidadeXadrez;
 }
 @Override
 public boolean[][] movimentosPossiveis(){
@@ -55,8 +58,37 @@ public boolean[][] movimentosPossiveis(){
 			mat[p.getlinha()][p.getcoluna()] = true;
 			
 		}	
+		
+		// movimento especial en passant. Ele so vale quand acontece na linha 5
+		// que e a linha 3 da matriz
+		if (posicao.getlinha() == 3) {
+			Posicao esquerda = new Posicao(posicao.getlinha(),posicao.getcoluna()-1) ;
+			// verifica se a posicao da esquerda existe, se tem uma peca oponente na posicao,
+			// e se a peça q esta la e a peca q esta vulneravel a tomar o en passant
+			
+			if (getTabuleiro().existePosicao(esquerda) && existePecaAdversaria(esquerda) && getTabuleiro().peca(esquerda) == partidadeXadrez.getEnPassantVulneravel()) {
+				// se atender a todas as condicoes vai dizer que o peao pode capturar a peça q esta na posicao left
+				// mas ele nao vai mover pra posicao dela, ela vai pra posicao da linha logo acima
+				   mat[esquerda.getlinha()-1][esquerda.getcoluna()] = true;
+			}			   
+
+			
+			Posicao direita  = new Posicao(posicao.getlinha(),posicao.getcoluna()+1) ;
+			// verifica se a posicao da esquerda existe, se tem uma peca oponente na posicao,
+			// e se a peça q esta la e a peca q esta vulneravel a tomar o en passant
+			
+			if  (getTabuleiro().existePosicao(direita) && existePecaAdversaria(direita) && getTabuleiro().peca(direita) == partidadeXadrez.getEnPassantVulneravel() ){
+				// se atender a todas as condicoes vai dizer que o peao pode capturar a peça q esta na posicao left
+				// mas ele nao vai mover pra posicao dela, ela vai pra posicao da linha logo acima
+				   mat[direita.getlinha()-1][direita.getcoluna()] = true;
+			}			   
+			
+			
+		}
+		
+		
 	}
-	else {	// agora fas para as ptreas, a diferenca e na direcao das linhas que tem de somar e nao diminui
+	else {	// agora fas para as petras, a diferenca e na direcao das linhas que tem de somar e nao diminui
 		// nesse ponto a regra e de andar rpa cima, (diminuindo a linha)
 		// ve se o peao pode ir para essa posicao
 		p.setValores(posicao.getlinha() +1,  posicao.getcoluna());
@@ -92,6 +124,34 @@ public boolean[][] movimentosPossiveis(){
 			mat[p.getlinha()][p.getcoluna()] = true;
 			
 		}	
+		
+		// movimento especial en passant das pecas pretas . Ele so vale quando acontece na linha 4
+		// que e a linha 4 da matriz. 
+		if (posicao.getlinha() == 4) {
+			Posicao esquerda = new Posicao(posicao.getlinha(),posicao.getcoluna()-1) ;
+			// verifica se a posicao da esquerda existe, se tem uma peca oponente na posicao,
+			// e se a peça q esta la e a peca q esta vulneravel a tomar o en passant
+			
+			if (getTabuleiro().existePosicao(esquerda) && existePecaAdversaria(esquerda) && getTabuleiro().peca(esquerda) == partidadeXadrez.getEnPassantVulneravel()) {
+				// se atender a todas as condicoes vai dizer que o peao pode capturar a peça q esta na posicao left
+				// mas ele nao vai mover pra posicao dela, ela vai pra posicao da linha logo abaixo
+				   mat[esquerda.getlinha()+1][esquerda.getcoluna()] = true;
+			}			   
+
+			
+			Posicao direita  = new Posicao(posicao.getlinha(),posicao.getcoluna()+1) ;
+			// verifica se a posicao da esquerda existe, se tem uma peca oponente na posicao,
+			// e se a peça q esta la e a peca q esta vulneravel a tomar o en passant
+			
+			if  (getTabuleiro().existePosicao(direita) && existePecaAdversaria(direita) && getTabuleiro().peca(direita) == partidadeXadrez.getEnPassantVulneravel() ){
+				// se atender a todas as condicoes vai dizer que o peao pode capturar a peça q esta na posicao left
+				// mas ele nao vai mover pra posicao dela, ela vai pra posicao da linha logo abaixo
+				   mat[direita.getlinha()+1][esquerda.getcoluna()] = true;
+			}			   
+			
+			
+		}
+
 	}
  return mat;
 }
