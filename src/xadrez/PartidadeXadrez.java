@@ -1,5 +1,6 @@
 package xadrez;
 
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,7 +24,7 @@ public class PartidadeXadrez {
   private boolean xeque;
   private boolean xequeMate;
   private PecadeXadrez enPassantVulneravel;
-  
+ private  PecadeXadrez promovida;
   
   // Tinha feito essa lista como pecaDeXadrez mas achou melhor usar a classe mais
   // generica peca
@@ -60,8 +61,10 @@ public boolean getXequeMate() {
 public PecadeXadrez getEnPassantVulneravel() {
 	return enPassantVulneravel;
 	// essa propriedade ja comeca como falso entao nao precisa inicializa-la
-	
-	
+}
+
+public PecadeXadrez getPromovida() {
+	return promovida;
 }
 public  PecadeXadrez[][] getPecas() {
 	 
@@ -102,6 +105,28 @@ public  PecadeXadrez[][] getPecas() {
 	 
 	 PecadeXadrez PecaMovida = (PecadeXadrez)tabuleiro.peca(destino);
 	 
+	 // # specialmov Promotion
+	 
+	 /* Movimento especial Promocao
+	    Nessa jogada, quando um peao chega do outro lado do tabuleiro ele pode ser "promovido", sendo
+	    trocado por outra peça mais poderosa como um cavalo, uma torre ou uma rainha
+	   
+	  */
+	 promovida = null;
+	 if ( PecaMovida instanceof Peao) {
+		 // Se a peça movida por um peao e chegar na 1a ou na ultima linha dependendo da cor...
+		 if (PecaMovida.getCor() ==  Cor.BRANCA && destino.getlinha() == 0  || (PecaMovida.getCor() ==  Cor.PRETA  && destino.getlinha() == 7 )) {
+             // indica que a preca promovida foi o peao
+             // em seguida indica que a ele foi promovido para rainha antes de pedir pro usuario indicar pra qual peca ele quer trocar
+			 // e pessoalmente nao vi sentido em duas atribuicoes seguidas, mas ok,to seguindo o q ele fez.
+			 // ao gerar o metodo de troca da peca ele explicou que nao faz sentido chamar a troca da peca
+			 // se nao tem a peça inicial que sera trocada. La ele faz os testes e nao e pra variavel estar nula
+			 
+             promovida = (PecadeXadrez)tabuleiro.peca(destino);
+             promovida = trocaPecaPromovida("R");
+		 }
+	 }
+	 
 	 // agora testa se o oponente esta em xeque
 	 xeque = (testeXeque(oponente(jogadorAtual))) ? true : false; 
 	 
@@ -132,8 +157,42 @@ public  PecadeXadrez[][] getPecas() {
 	 
  }
 
- 
- private Peca movimenta(Posicao origem, Posicao destino) {
+     public PecadeXadrez trocaPecaPromovida( String tipo) {
+    	 if (promovida == null) {
+    		 throw new IllegalStateException("Nao ha peça a ser promovida");    		 
+    	 }
+    	 // se a peca escolhida nao for nenehuma das previstas da erro( Bispo, cavalo ou rainha)
+    	 
+    	 if (!tipo.equals("B") && !tipo.equals("C") && !tipo.equals("T") & !tipo.equals("R") ) {
+    		 throw new   InvalidParameterException("Tipo invalido para promocao");    		 
+    	 }
+    	 // remove a peça na posicao atual. que nesse caso ainda é o peao . agora da pra entender
+    	 // a dupla atribuicao la em cima
+    	 Posicao pos = promovida.getPosicaoXadrez().paraPosicao();
+    	 Peca p = tabuleiro.removePeca(pos);
+    	 pecasNoTabuleiro.remove(p);
+    	 
+    	 // agora substitui a peça. criando um metodo auxiluior chamado nova peca
+    	 PecadeXadrez novaPeca = novaPeca(tipo, promovida.getCor());
+    	 tabuleiro.PosicionaPeca(novaPeca, pos);
+    	 pecasNoTabuleiro.add(novaPeca);
+    	 
+    	 return novaPeca;
+    	 
+    	 
+    	 }
+     
+     private PecadeXadrez novaPeca(String tipo, Cor cor) {
+    	  if (tipo.equals("B")) return new Bispo(tabuleiro, cor) ;
+    	  if (tipo.equals("C")) return new Cavalo(tabuleiro, cor) ;
+    	  if (tipo.equals("R")) return new Rainha(tabuleiro, cor) ;
+    	  return new Torre(tabuleiro, cor) ; // Nao precisa de um quarto IF nem de else aqui. 
+    	                                     // se nao entrar nos 3 if de cima e pq e a torre 
+                  	  
+     }
+     
+     
+     private Peca movimenta(Posicao origem, Posicao destino) {
 	 // retira a peca da posicao de origem
 	 PecadeXadrez p = (PecadeXadrez)tabuleiro.removePeca(origem);
 	 
@@ -233,8 +292,8 @@ public  PecadeXadrez[][] getPecas() {
 	 
 	 if (pecaCapturada != null) {
 		 tabuleiro.PosicionaPeca(pecaCapturada,  destino);
-	    pecasCapturadas.remove(pecaCapturada );
-	 pecasNoTabuleiro.add(pecaCapturada);
+	     pecasCapturadas.remove(pecaCapturada );
+	     pecasNoTabuleiro.add(pecaCapturada);
 	 }
 	 
 	

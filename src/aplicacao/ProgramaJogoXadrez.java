@@ -57,8 +57,17 @@ public class ProgramaJogoXadrez {
 	            // ela sera incluida na lista d epecas capturadas 
 	            if (pecaCapturada != null ) { 
 	            	capturadas.add(pecaCapturada);
-	            	
 	            }
+	            if (partidadeXadrez.getPromovida() != null) {
+	            	System.out.println("Enter com a peca a ser promovida: (B/C/T/R");
+	            	System.out.println("<B>ispo");
+	            	System.out.println("<C>avalo");
+	            	System.out.println("<T>orre");
+	            	System.out.println("<R>ainha");
+	            	System.out.println("--->");
+	            	String tipo = sc.nextLine();
+	            	partidadeXadrez.trocaPecaPromovida(tipo).decrementaContaMovimentos()		
+;	            }
 			}   
 		   catch (XadrezExcecao e) {
 			   System.out.println(e.getMessage());
